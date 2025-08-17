@@ -21,13 +21,6 @@ A robust, command-line based application built with Java for scheduling, managin
 
 ---
 
-## 📂 Project Structure
-
-The project is contained within a single source file for simplicity. When you run the application, it will automatically generate the `events.dat` file in the same directory.
-
-```
----
-
 ## 🚀 Getting Started
 
 Follow these steps to compile and run the application on your local machine.
