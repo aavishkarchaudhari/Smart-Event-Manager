@@ -45,7 +45,7 @@ Follow these steps to compile and run the application on your local machine.
     ```bash
     java SmartEventManager
     ```
--   You will be prompted to enter the admin password. The default password is **`admin`**.
+-   You will be prompted to enter the admin password. The default password is **`Aavishkar`**.
 
 ---
 
@@ -55,7 +55,7 @@ Here is a sample workflow of how to use the Smart Event Manager:
 
 ```plaintext
 Welcome to the Smart Event Manager!
-Enter admin password to manage events (or type 'exit' to close): admin
+Enter admin password to manage events (or type 'exit' to close): Aavishkar
 
 --- Admin Menu ---
 1. Add Event
