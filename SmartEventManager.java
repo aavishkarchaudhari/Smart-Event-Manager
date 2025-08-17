@@ -107,7 +107,7 @@ public class SmartEventManager {
     // Formatters for date and time input
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-    private static final String ADMIN_PASSWORD = "admin"; // Simple hardcoded password
+    private static final String ADMIN_PASSWORD = "Aavishkar"; // Simple hardcoded password
 
     public SmartEventManager() {
         this.storageManager = new StorageManager();
