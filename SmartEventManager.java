@@ -35,26 +35,58 @@ class Event implements Serializable {
     }
 
     // Getters
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public LocalDate getDate() { return date; }
-    public LocalTime getTime() { return time; }
-    public String getType() { return type; }
-    public String getLocation() { return location; }
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
 
     // Setters for editing
-    public void setName(String name) { this.name = name; }
-    public void setDate(LocalDate date) { this.date = date; }
-    public void setTime(LocalTime time) { this.time = time; }
-    public void setType(String type) { this.type = type; }
-    public void setLocation(String location) { this.location = location; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     @Override
     public String toString() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         return String.format("ID: %-3d | Name: %-20s | Date: %-12s | Time: %-7s | Type: %-15s | Location: %s",
-                id, name, date.format(dateFormatter), time.format(timeFormatter), type, location.isEmpty() ? "N/A" : location);
+                id, name, date.format(dateFormatter), time.format(timeFormatter), type,
+                location.isEmpty() ? "N/A" : location);
     }
 }
 
@@ -66,6 +98,7 @@ class StorageManager {
 
     /**
      * Saves the list of events to a binary file.
+     * 
      * @param events The list of events to save.
      */
     public void saveEvents(List<Event> events) {
@@ -78,7 +111,9 @@ class StorageManager {
 
     /**
      * Loads the list of events from the binary file.
-     * @return A list of events, or an empty list if the file doesn't exist or is empty.
+     * 
+     * @return A list of events, or an empty list if the file doesn't exist or is
+     *         empty.
      */
     @SuppressWarnings("unchecked")
     public List<Event> loadEvents() {
@@ -87,7 +122,8 @@ class StorageManager {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
                 return (List<Event>) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error: Could not load events from file. A new file will be created. " + e.getMessage());
+                System.out.println(
+                        "Error: Could not load events from file. A new file will be created. " + e.getMessage());
             }
         }
         return new ArrayList<>(); // Return empty list if file not found or error
@@ -167,15 +203,32 @@ public class SmartEventManager {
 
             String choice = scanner.nextLine();
             switch (choice) {
-                case "1": addEvent(); break;
-                case "2": editEvent(); break;
-                case "3": deleteEvent(); break;
-                case "4": viewEventsMenu(); break;
-                case "5": searchEvents(); break;
-                case "6": sendReminders(); break;
-                case "7": viewStatistics(); break;
-                case "8": System.out.println("Logging out..."); return;
-                default: System.out.println("Invalid option. Please try again.");
+                case "1":
+                    addEvent();
+                    break;
+                case "2":
+                    editEvent();
+                    break;
+                case "3":
+                    deleteEvent();
+                    break;
+                case "4":
+                    viewEventsMenu();
+                    break;
+                case "5":
+                    searchEvents();
+                    break;
+                case "6":
+                    sendReminders();
+                    break;
+                case "7":
+                    viewStatistics();
+                    break;
+                case "8":
+                    System.out.println("Logging out...");
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
             }
         }
     }
@@ -236,39 +289,44 @@ public class SmartEventManager {
 
                 System.out.print("Enter new Name (or press Enter to keep '" + event.getName() + "'): ");
                 String name = scanner.nextLine();
-                if (!name.isEmpty()) event.setName(name);
+                if (!name.isEmpty())
+                    event.setName(name);
 
-                System.out.print("Enter new Date (DD-MM-YYYY) (or press Enter to keep '" + event.getDate().format(DATE_FORMATTER) + "'): ");
+                System.out.print("Enter new Date (DD-MM-YYYY) (or press Enter to keep '"
+                        + event.getDate().format(DATE_FORMATTER) + "'): ");
                 String dateStr = scanner.nextLine();
                 LocalDate newDate = event.getDate();
                 if (!dateStr.isEmpty()) {
                     newDate = LocalDate.parse(dateStr, DATE_FORMATTER);
                 }
 
-                System.out.print("Enter new Time (HH:MM) (or press Enter to keep '" + event.getTime().format(TIME_FORMATTER) + "'): ");
+                System.out.print("Enter new Time (HH:MM) (or press Enter to keep '"
+                        + event.getTime().format(TIME_FORMATTER) + "'): ");
                 String timeStr = scanner.nextLine();
                 LocalTime newTime = event.getTime();
                 if (!timeStr.isEmpty()) {
                     newTime = LocalTime.parse(timeStr, TIME_FORMATTER);
                 }
-                
+
                 // Check for conflicts with the new date/time
                 if (hasConflict(newDate, newTime, event.getId())) {
-                    System.out.println("!! Conflict Detected: Cannot move event to this time slot as it's already occupied.");
+                    System.out.println(
+                            "!! Conflict Detected: Cannot move event to this time slot as it's already occupied.");
                     suggestAvailableSlots(newDate);
                     return;
                 }
                 event.setDate(newDate);
                 event.setTime(newTime);
 
-
                 System.out.print("Enter new Type (or press Enter to keep '" + event.getType() + "'): ");
                 String type = scanner.nextLine();
-                if (!type.isEmpty()) event.setType(type);
+                if (!type.isEmpty())
+                    event.setType(type);
 
                 System.out.print("Enter new Location (or press Enter to keep '" + event.getLocation() + "'): ");
                 String location = scanner.nextLine();
-                if (!location.isEmpty()) event.setLocation(location);
+                if (!location.isEmpty())
+                    event.setLocation(location);
 
                 storageManager.saveEvents(events);
                 System.out.println("Event updated successfully!");
@@ -282,7 +340,7 @@ public class SmartEventManager {
             System.out.println("Invalid date or time format.");
         }
     }
-    
+
     /**
      * Handles deleting an event.
      */
@@ -335,9 +393,10 @@ public class SmartEventManager {
                 System.out.println("Invalid option.");
         }
     }
-    
+
     /**
      * Displays a list of events.
+     * 
      * @param eventList The list of events to display.
      */
     private void displayEvents(List<Event> eventList) {
@@ -345,26 +404,29 @@ public class SmartEventManager {
             System.out.println("No events to display.");
             return;
         }
-        System.out.println("-----------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------");
         // Sort events by date and then by time before displaying
         eventList.stream()
-            .sorted(Comparator.comparing(Event::getDate).thenComparing(Event::getTime))
-            .forEach(System.out::println);
-        System.out.println("-----------------------------------------------------------------------------------------------------");
+                .sorted(Comparator.comparing(Event::getDate).thenComparing(Event::getTime))
+                .forEach(System.out::println);
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------");
     }
-    
+
     /**
      * Filters and displays events for a specific date.
+     * 
      * @param date The date to filter by.
      */
     private void viewEventsForDate(LocalDate date) {
         System.out.println("\n--- Events for " + date.format(DATE_FORMATTER) + " ---");
         List<Event> dayEvents = events.stream()
-            .filter(e -> e.getDate().equals(date))
-            .collect(Collectors.toList());
+                .filter(e -> e.getDate().equals(date))
+                .collect(Collectors.toList());
         displayEvents(dayEvents);
     }
-    
+
     /**
      * Searches for events by a keyword in their name or type.
      */
@@ -374,9 +436,9 @@ public class SmartEventManager {
         String keyword = scanner.nextLine().toLowerCase();
 
         List<Event> foundEvents = events.stream()
-            .filter(e -> e.getName().toLowerCase().contains(keyword) || e.getType().toLowerCase().contains(keyword))
-            .collect(Collectors.toList());
-        
+                .filter(e -> e.getName().toLowerCase().contains(keyword) || e.getType().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
+
         System.out.println("Found " + foundEvents.size() + " matching event(s):");
         displayEvents(foundEvents);
     }
@@ -437,8 +499,8 @@ public class SmartEventManager {
 
         // Count events by type
         Map<String, Long> eventsByType = events.stream()
-            .collect(Collectors.groupingBy(Event::getType, Collectors.counting()));
-        
+                .collect(Collectors.groupingBy(Event::getType, Collectors.counting()));
+
         System.out.println("\nEvents by Type:");
         eventsByType.forEach((type, count) -> System.out.println("  - " + type + ": " + count));
     }
@@ -453,21 +515,25 @@ public class SmartEventManager {
      * Checks if a new or updated event conflicts with existing events.
      * A conflict is defined as another event on the same day and at the same time.
      * We assume events last for one hour for simplicity.
-     * @param date The date of the event to check.
-     * @param time The time of the event to check.
+     * 
+     * @param date    The date of the event to check.
+     * @param time    The time of the event to check.
      * @param eventId The ID of the event being checked. Pass -1 for a new event,
-     * or the event's own ID if editing to exclude it from the check.
+     *                or the event's own ID if editing to exclude it from the check.
      * @return true if a conflict exists, false otherwise.
      */
+
     private boolean hasConflict(LocalDate date, LocalTime time, int eventId) {
         for (Event existingEvent : events) {
             if (existingEvent.getId() == eventId) {
                 continue; // Skip checking against itself when editing
             }
             if (existingEvent.getDate().equals(date)) {
-                // Assuming events are 1 hour long. A conflict occurs if the new event's start time
+                // Assuming events are 1 hour long. A conflict occurs if the new event's start
+                // time
                 // is within the 1-hour block of an existing event.
-                if (time.isBefore(existingEvent.getTime().plusHours(1)) && time.isAfter(existingEvent.getTime().minusHours(1))) {
+                if (time.isBefore(existingEvent.getTime().plusHours(1))
+                        && time.isAfter(existingEvent.getTime().minusHours(1))) {
                     return true;
                 }
             }
@@ -477,17 +543,18 @@ public class SmartEventManager {
 
     /**
      * Suggests available 1-hour time slots for a given date.
+     * 
      * @param date The date to find slots for.
      */
     private void suggestAvailableSlots(LocalDate date) {
         System.out.println("--- Suggested Available Slots for " + date.format(DATE_FORMATTER) + " ---");
-        
+
         // Get times of all events on the given day, sorted
         List<LocalTime> bookedTimes = events.stream()
-            .filter(e -> e.getDate().equals(date))
-            .map(Event::getTime)
-            .sorted()
-            .collect(Collectors.toList());
+                .filter(e -> e.getDate().equals(date))
+                .map(Event::getTime)
+                .sorted()
+                .collect(Collectors.toList());
 
         List<String> availableSlots = new ArrayList<>();
         // Check slots from 8 AM to 5 PM (08:00 to 17:00)
@@ -497,9 +564,8 @@ public class SmartEventManager {
         while (potentialStartTime.isBefore(dayEnd)) {
             final LocalTime checkTime = potentialStartTime;
             // Check if this potential start time conflicts with any booked time
-            boolean isConflict = bookedTimes.stream().anyMatch(bookedTime -> 
-                checkTime.isBefore(bookedTime.plusHours(1)) && checkTime.isAfter(bookedTime.minusHours(1))
-            );
+            boolean isConflict = bookedTimes.stream().anyMatch(bookedTime -> checkTime.isBefore(bookedTime.plusHours(1))
+                    && checkTime.isAfter(bookedTime.minusHours(1)));
 
             if (!isConflict) {
                 availableSlots.add(checkTime.format(TIME_FORMATTER));
