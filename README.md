@@ -26,13 +26,6 @@ A robust, command-line based application built with Java for scheduling, managin
 The project is contained within a single source file for simplicity. When you run the application, it will automatically generate the `events.dat` file in the same directory.
 
 ```
-SmartEventManager/
-│
-├── 📄 SmartEventManager.java    # The complete source code for the application
-├── 💾 events.dat                # Auto-generated binary file for event storage
-└── 📧 attendees.txt             # (Optional) Create this file for the reminder feature
-```
-
 ---
 
 ## 🚀 Getting Started
